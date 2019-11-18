@@ -15,36 +15,33 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        one.setNMR(1255, true)
-        two.setNMR(1234, false)
+        one.setNMR(1300f, 1)
+        two.setNMR(1300f, 0)
+        one.df()
+        two.df()
     }
 
 }
 
 class Player : RatingManager() {
+    override var MyRating: Float = 2000f
 
-
-}
-
-
-fun jf (Rating1:RatingManager) {
-    Rating1.setNMR()
-    println(Rating1.NewMyRating)
-
+    fun df(){
+        Log.d("TEST",MyRating.toString() )
+    }
 }
 
 
 open class RatingManager {
-    var MyRating:Float = 0f
+   open var MyRating:Float = 0f
     var K:Int = 0
-    var NewMyRating:Float = 0f
     var WaitingResult:Float = 0f
 
     fun setNMR(ratingEnemy : Float, resulf : Int){
 
         WaitingResult = 1/(1 + 10 *((ratingEnemy - MyRating)/400))
         AccountK()
-        NewMyRating = MyRating + K *(resulf - WaitingResult)
+        MyRating = MyRating + K *(resulf - WaitingResult)
     }
 
     fun AccountK() {
