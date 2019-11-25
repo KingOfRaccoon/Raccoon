@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Math.pow
+import java.lang.Math.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        one.counterRating = NewRankOther()
+        one.counterRating = NewRankElo()
         one.set1(1300f, 1)
-
+        two.counterRating = NewRankElo()
         two.set1(1300f, 0)
         f.setText(one.df())
         d.setText(two.df())
@@ -57,8 +57,10 @@ class NewRankElo:NewRank(){
     override fun setNMR( MyRating :Double,ratingEnemy : Float, resulf : Int):Double{
         var WaitingResult:Double = 0.0
         WaitingResult = 1/(1 +  pow( 10.0 ,(ratingEnemy - MyRating)/400))
-        if (WaitingResult > 0.9)
-            WaitingResult = 0.9
+        if (WaitingResult > 0.92)
+            WaitingResult = 0.92
+        if (WaitingResult < 0.08)
+            WaitingResult = 0.08
         AccountK(MyRating)
         return MyRating + K *(resulf - WaitingResult)
     }
@@ -75,6 +77,8 @@ class NewRankOther:NewRank(){
         WaitingResult = 1/(1 +  pow( 1.0 ,(ratingEnemy - MyRating)/400))
         if (WaitingResult > 0.9)
             WaitingResult = 0.9
+        if (WaitingResult < 0.1)
+            WaitingResult = 0.1
         AccountK(MyRating)
         return MyRating + K *(resulf - WaitingResult)
     }
@@ -85,3 +89,18 @@ class NewRankOther:NewRank(){
         else K = 40
     }
 }
+class NewRankGliko:NewRank(){
+    override fun setNMR( RDold :Double,ratingEnemy : Float, r : Int): Double {
+
+        var rN:Double = 0.0
+        var j:Int = 1
+        var Sum:Double = 0.0
+        var m:Int = 0 //Количество игр
+        var t:Int = 0 //Количество несыгранных периодов
+        var RD = min(sqrt ( RDold * RDold + 50 * 50 * t ).compareTo(Int.MAX_VALUE), 350)
+        for(j in 1..m)
+            Sum = g[j] * (s[j] - E[j])
+            j++
+        rN = r + q / ( (1 / RD * RD)+(1 / d*d ) ) * Sum
+    }
+    }
