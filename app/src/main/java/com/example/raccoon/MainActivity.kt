@@ -10,31 +10,42 @@ import java.lang.Math.*
 
 class MainActivity : AppCompatActivity() {
     fun fhgkk():Double {
-        var j: Int = 1
-        var Sum: Double = 0.0
-        var m: Int = 0 //Количество игр
+        var m: Int = 3 //Количество игр
         var t: Int = 0 //Количество несыгранных периодов
         var q: Double = log(10.0) / 400
         var PI: Double = 3.14159
-        var RDold:Double=200.0
-        var RD = min(sqrt(RDold * RDold + 50 * 50 * t).toInt(), 350)
-        var ratingEnemy = 1400
-        var r =1500
-        var resulf =1
-        var RD1 = 30
-        var g: Double  = 1 / sqrt(1 + (3 * q * q) * (RD1 * RD1) / pow(PI, 2.0))
-        Log.d("Test", g.toString())
-        var E: Double = 1 / (1 + pow(10.0, (-g * (r - ratingEnemy)) / 400))
-        Log.d("Test", E.toString())
-        var sum2 = g * (resulf - E)
-        Log.d("Test", sum2.toString())
-        var Sum2 = g * g * E * (1 - E)
-        Log.d("Test", Sum2.toString())
-        var d: Double  = sqrt(1/(q * q * Sum2))
+        var RDold: Double = 200.0
+        //var RD: Double = min(sqrt(RDold * RDold + 50 * 50 * t).toDouble(), 350.0)
+        var RD: Double = 200.0
+        var ratingEnemy: MutableList<Double> = mutableListOf(1400.0, 1550.0, 1700.0)
+        var r: Double = 1500.0
+        var s: MutableList<Int> = mutableListOf(1, 0, 0)
+        var RDEnemy: MutableList<Int> = mutableListOf(30, 100, 300)
+        var g: MutableList<Double> = MutableList(3,{0.0})
+        var E: MutableList<Double> = MutableList(3,{0.0})
+        var rN: MutableList<Double> = MutableList(3,{0.0})
+        var Sum2: Double = 0.0
+        var Sum: Double = 0.0
+        for (i in 0..m-1) {
+            g[i] = 1 / sqrt(1 + (3 * q * q) * (RDEnemy[i] * RDEnemy[i]) / pow(PI, 2.0))
+            E[i] = 1 / (1 + pow(10.0, (-g[i] * (r - ratingEnemy[i])) / 400))
+            Sum += g[i] * (s[i] - E[i])
+            Sum2 += g[i] * g[i] * E[i] * (1 - E[i])
+            Log.d("Test", Sum2.toString())
+        }
+        var d: Double = sqrt(1 / (q * q * Sum2))
+        for (i in 0..m-1) {
+            rN[i] = r + (q / ((1 / RD * RD) + (1 / d * d)) * Sum)
+            r = rN[i]
+
+        }
+        for (i in 0..m-1){
+            Log.d("Test", E[i].toString())
+            Log.d("Test", rN[i].toString())
+            Log.d("Test", g[i].toString())
+    }
         Log.d("Test", d.toString())
-        var rN: Double = r + (q / ((1 / RD * RD) + (1 / d * d)) * sum2)
-        Log.d("Test", rN.toString())
-        return rN
+            return rN[1]
     }
 
     var one = Player()
@@ -43,11 +54,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        one.counterRating = NewRankGliko()
-        one.set1(200.0, 1400f, 1500, 0)
-        two.counterRating = NewRankGliko()
-        two.set1(200.0, 1400f, 1500, 1)
-f.setText(fhgkk().toString())
+        //one.counterRating = NewRankGliko()
+        //one.set1(200.0, 1400f, 1500, 0)
+        //two.counterRating = NewRankGliko()
+        //two.set1(200.0, 1400f, 1500, 1)
+        f.run { setText(fhgkk().toString()) }
     }
 
 }
