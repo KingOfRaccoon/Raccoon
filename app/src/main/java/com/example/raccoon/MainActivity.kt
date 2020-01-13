@@ -25,17 +25,18 @@ class MainActivity : AppCompatActivity() {
         var E: MutableList<Double> = MutableList(3,{0.0})
         var rN: MutableList<Double> = MutableList(3,{0.0})
         var Sum2: Double = 0.0
-        var Sum: Double = 0.0
+        var Sum: MutableList<Double> = MutableList(3, {0.0})
         for (i in 0..m-1) {
             g[i] = 1 / sqrt(1 + (3 * q * q) * (RDEnemy[i] * RDEnemy[i]) / pow(PI, 2.0))
             E[i] = 1 / (1 + pow(10.0, (-g[i] * (r - ratingEnemy[i])) / 400))
-            Sum += g[i] * (s[i] - E[i])
             Sum2 += g[i] * g[i] * E[i] * (1 - E[i])
             Log.d("Test", Sum2.toString())
         }
         var d: Double = sqrt(1 / (q * q * Sum2))
         for (i in 0..m-1) {
-            rN[i] = r + (q / ((1 / RD * RD) + (1 / d * d)) * Sum)
+            Sum[i] = g[i] * (s[i] - E[i])
+            var temp = 1.0 / (RD* RD) + 1.0 / (d * d)
+            rN[i] = r + (q * Sum[i] * (1 / temp))
             r = rN[i]
 
         }
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("Test", g[i].toString())
     }
         Log.d("Test", d.toString())
-            return rN[1]
+            return rN[2]
     }
 
     var one = Player()
